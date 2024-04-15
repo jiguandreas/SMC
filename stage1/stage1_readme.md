@@ -23,6 +23,14 @@
 - 最近一次保养距今月数（0-12，表示距离上次保养过去的月份数）/Months_Since_Last_Maintenance
 - 能耗（千瓦时/百公里）/energy_consumption
 
-2.进行主成分分析或因子分析对数据降维，然后进行相关性分析，找出相关性较高的变量，进行变量筛选。
+2.数据的缺失值、异常值以及标准化处理
 
-3.使用逻辑回归、决策树、随机森林、XGBoost等算法进行建模，对模型进行评估，选择最优模型。
+3.进行主成分分析或因子分析对数据降维(保留信息要>=90%)，然后进行相关性分析，找出相关性较高的变量，进行变量筛选。
+
+4.使用逻辑回归、决策树、随机森林、XGBoost等算法进行建模，对模型进行评估，选择最优模型。
+
+
+for step1: MakeData2CSV_byGPT.py
+for step2: 
+for step3: Analysis_factors.py
+for step4: EC_Pred_by_factors.py
