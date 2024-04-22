@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import FactorAnalysis
 
 
+# 主成分分析，threshold: 阈值，解释方差比例的累积和大于等于该值时停止（保留多少数据）
 def Principal_Component_Analysis(df: DataFrame, threshold=0.95):
     features = df.columns[:-1]
     x = df.loc[:, features].values
@@ -29,6 +30,7 @@ def Principal_Component_Analysis(df: DataFrame, threshold=0.95):
     return finalDf
 
 
+# 因子分析；threshold: 阈值，解释方差比例的累积和大于等于该值时停止（保留多少数据）
 def Factor_Analysis(df: DataFrame, threshold=0.4):
     features = df.columns[:-1]
     x = df.loc[:, features].values
@@ -61,6 +63,7 @@ def Factor_Analysis(df: DataFrame, threshold=0.4):
     return final_factor_df
 
 
+# 相关性分析；method: pearson, kendall, spearman；threshold: 阈值，相关系数的绝对值小于该值的因素将被删除
 def correlation_analysis(df: DataFrame, method='spearman', threshold=0.1):
     correlation_matrix = df.corr(method=method)
 

@@ -33,4 +33,4 @@
 for step1: MakeData2CSV_byGPT.py
 for step2: 
 for step3: Analysis_factors.py
-for step4: EC_Pred_by_factors.py
+for step4: EC_Regression_by_factors.py
