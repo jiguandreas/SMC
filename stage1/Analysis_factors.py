@@ -83,8 +83,9 @@ def correlation_analysis(df: DataFrame, method='spearman', threshold=0.1):
 
 
 if __name__ == '__main__':
-    file_path = './output_null.csv'
+    file_path = './modified_file.csv'
     df = pd.read_csv(file_path)
-    PCA_df = Principal_Component_Analysis(df, threshold=0.95)
+    PCA_df = Principal_Component_Analysis(df, threshold=0.9) #保留原始数据的阈值
     # FA_df = Factor_Analysis(df, threshold=0.95)
     CA_df = correlation_analysis(PCA_df, method='spearman', threshold=0.1)
+
