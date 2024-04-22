@@ -83,7 +83,7 @@ def correlation_analysis(df: DataFrame, method='spearman', threshold=0.1):
 
 
 if __name__ == '__main__':
-    file_path = './Electric_Vehicle_Trip_Energy_Consumption_Data.csv'
+    file_path = './output_null.csv'
     df = pd.read_csv(file_path)
     PCA_df = Principal_Component_Analysis(df, threshold=0.95)
     # FA_df = Factor_Analysis(df, threshold=0.95)
