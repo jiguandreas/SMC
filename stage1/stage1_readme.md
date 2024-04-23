@@ -1,27 +1,30 @@
-1.假定的数据集包含以下变量：
-- 温度（摄氏度）/temperature
-- 车速（公里/小时）/speed
-- 载重（千克）/load
-- 空调使用（0表示未使用，1表示使用）/ac_use
-- 地形坡度（百分比，正值表示上坡，负值表示下坡）/terrain_slope
-- 风速（公里/小时）/wind_speed
-- 驾驶模式（0表示经济模式，1表示标准模式，2表示运动模式）/driving_mode
-- 天气状况（0表示晴天，1表示雨天，2表示雪天）/Weather_condition
-- 车龄（年）/Vehicle_age
-- 轮胎类型（0表示夏季轮胎，1表示全季轮胎，2表示冬季轮胎）/Tire_type
-- 是否夜间行驶/Night_Driving
-- 是否城市行驶/Urban_Driving
-- 是否高速行驶/Highway_Driving
-- 平均乘客数量（1-5，车辆内平均乘客数量）/Average_Passengers
-- 有无定速巡航使用（0或1，表示是否使用定速巡航）/Cruise_Control_Use
-- 有无再生制动系统（0或1，表示车辆是否配备再生制动系统）/Regenerative_Braking_System
-- 外部湿度（0-100%，外部环境的相对湿度）/External_Humidity
-- 路面状况（0表示干燥，1表示潮湿，2表示积水，3表示结冰）/Road_Condition
-- 是否使用热泵系统（0或1，表示是否使用热泵系统进行温控）/Heat_Pump_System
-- 车内设备使用/In_Car_Device_Count
-- 充电频率（每周充电次数，0-7）/Charging_Frequency
-- 最近一次保养距今月数（0-12，表示距离上次保养过去的月份数）/Months_Since_Last_Maintenance
-- 能耗（千瓦时/百公里）/energy_consumption
+1.数据集包含以下变量：
+- DayNum：日期编号，表示数据采集的日期。
+- VehId：车辆编号，用于标识不同的车辆。
+- Trip：行程，表示车辆的行驶路线或行程编号。
+- Timestamp(ms)：时间戳（毫秒），记录数据采集的时间。
+- Latitude[deg]：纬度（度），表示地点的纬度坐标。
+- Longitude[deg]：经度（度），表示地点的经度坐标。
+- Vehicle Speed[km/h]：车辆速度（公里/小时），记录车辆当前的行驶速度。
+- OAT[DegC]：外部空气温度（摄氏度），表示车辆周围的环境温度。
+- Air Conditioning Power[kW]：空调功率（千瓦），记录车辆空调系统的功率消耗。
+- Heater Power[Watts]：加热器功率（瓦特），记录车辆加热系统的功率消耗。
+- HV Battery Current[A]：高压电池电流（安培），表示车辆高压电池的电流输出。
+- HV Battery SOC[%]：高压电池 SOC（百分比），表示车辆高压电池的电量百分比。
+- HV Battery Voltage[V]：高压电池电压（伏特），表示车辆高压电池的电压。
+- Elevation Raw[m]：原始海拔（米），记录车辆所在位置的海拔高度（原始数据）。
+- Elevation Smoothed[m]：平滑海拔（米），记录车辆所在位置的海拔高度（经过平滑处理后的数据）。
+- Gradient：坡度，表示车辆所在位置的坡度。
+- Energy_Consumption：能耗，表示车辆的能量消耗情况。
+- Matchted Latitude[deg]：匹配后的纬度（度），表示车辆实际位置与地图数据匹配后的纬度坐标。
+- Matched Longitude[deg]：匹配后的经度（度），表示车辆实际位置与地图数据匹配后的经度坐标。
+- Match Type：匹配类型，表示地图匹配的方式或类型。
+- Class of Speed Limit：速度限制等级，表示道路上的速度限制等级。
+- Speed Limit[km/h]：速度限制（公里/小时），记录道路的速度限制。
+- Speed Limit with Direction[km/h]：带方向的速度限制（公里/小时），记录带有方向的道路速度限制。
+- Intersection：交叉路口，记录车辆是否经过交叉路口（0代表无，1代表有）。
+- Bus Stops：公交车站，记录车辆是否经过公交车站（0代表无，1代表有）。
+- Focus Points：关注点，记录车辆所经过的特殊地点类型，如交叉路口、停车点、交通信号灯等（1代表交叉路口，2代表停车点，3代表交通信号灯）。
 
 2.数据的缺失值、异常值以及标准化处理
 
@@ -31,6 +34,6 @@
 
 
 for step1: MakeData2CSV_byGPT.py
-for step2: 
+for step2: csv_process.py
 for step3: Analysis_factors.py
 for step4: EC_Regression_by_factors.py
