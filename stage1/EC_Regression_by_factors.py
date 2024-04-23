@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from pyswarm import pso
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from skopt import BayesSearchCV
 from skopt.space import Categorical, Integer, Real
@@ -223,6 +225,30 @@ def train_LGBM(data, target_column='Energy_Consumption', pretrained=False):
         return best_model
 
 
+# 支持向量机回归
+def train_SVR(data, target_column='Energy_Consumption'):
+    input = data.drop(target_column, axis=1)
+    output = data[target_column]
+    X_train, X_test, y_train, y_test = train_test_split(input, output, test_size=0.2, random_state=42)
+
+    # 特征缩放
+    scaler_X = StandardScaler()
+    scaler_y = StandardScaler()
+    X_train_scaled = scaler_X.fit_transform(X_train)
+    X_test_scaled = scaler_X.transform(X_test)
+    y_train_scaled = scaler_y.fit_transform(y_train.values.reshape(-1, 1)).flatten()
+
+    svr_model = SVR(kernel='rbf', C=1.0, epsilon=0.1)
+    svr_model.fit(X_train_scaled, y_train_scaled)
+
+    y_pred_scaled = svr_model.predict(X_test_scaled)
+    y_pred = scaler_y.inverse_transform(y_pred_scaled.reshape(-1, 1)).flatten()
+    mse = mean_squared_error(y_test, y_pred)
+    print(f"Mean Squared Error: {mse}")
+
+    return svr_model
+
+
 def regression_main(csv_path, method='Random_Forest', pretrained=False):
     df = pd.read_csv(csv_path)
     if method == 'Random_Forest':
@@ -233,8 +259,10 @@ def regression_main(csv_path, method='Random_Forest', pretrained=False):
         model = train_XGBoost(df, target_column='Energy_Consumption', pretrained=pretrained)
     elif method == 'LGBM':
         model = train_LGBM(df, target_column='Energy_Consumption', pretrained=pretrained)
+    elif method == 'SVR':
+        model = train_SVR(df, target_column='Energy_Consumption')
 
 
 if __name__ == '__main__':
     csv_path = './output_factors.csv'
-    regression_main(csv_path, method='LGBM', pretrained=True)
+    regression_main(csv_path, method='SVR', pretrained=True)

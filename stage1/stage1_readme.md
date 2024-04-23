@@ -33,6 +33,7 @@
 4.使用逻辑回归、决策树、随机森林、XGBoost等算法进行建模，对模型进行评估，选择最优模型。
 
 
+
 for step1: MakeData2CSV_byGPT.py
 for step2: csv_process.py
 for step3: Analysis_factors.py
