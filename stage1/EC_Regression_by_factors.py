@@ -268,3 +268,4 @@ def regression_main(csv_path, method='Random_Forest', pretrained=False):
 if __name__ == '__main__':
     csv_path = './output_factors.csv'
     regression_main(csv_path, method='SVR', pretrained=True)
+
