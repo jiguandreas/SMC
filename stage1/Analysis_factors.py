@@ -101,4 +101,5 @@ def analysis_factors_main(csv_path, decomposition_method='PCA',
 
 if __name__ == '__main__':
     csv_path = './modified_file.csv'
-    analysis_factors_main(csv_path, decomposition_method='FA')
+    # correlation_analysis(pd.read_csv(csv_path))
+    analysis_factors_main(csv_path, decomposition_method='PCA')

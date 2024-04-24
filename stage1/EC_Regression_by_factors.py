@@ -263,6 +263,8 @@ def regression_main(csv_path, method='Random_Forest', pretrained=False):
         model = train_SVR(df, target_column='Energy_Consumption')
 
 
+
+
 if __name__ == '__main__':
     csv_path = './output_factors.csv'
     regression_main(csv_path, method='SVR', pretrained=True)
