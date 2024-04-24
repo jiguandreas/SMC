@@ -53,8 +53,13 @@ def Factor_Analysis(df: DataFrame, threshold=0.4):
     fa = FactorAnalysis(n_components=n_factors, random_state=42)
     factors = fa.fit_transform(x)
 
+    # 删除所有负荷量为0的因子
+    non_zero_factors = np.any(fa.components_ != 0, axis=1)
+    factors = factors[:, non_zero_factors]
+    n_factors = np.sum(non_zero_factors)
+
     print("=" * 25 + " FACTOR ANALYSIS " + "=" * 25)
-    loadings_df = pd.DataFrame(fa.components_, columns=features,
+    loadings_df = pd.DataFrame(fa.components_[non_zero_factors], columns=features,
                                index=[f'factor{i + 1}' for i in range(n_factors)])
     print(loadings_df)
 
@@ -82,9 +87,18 @@ def correlation_analysis(df: DataFrame, method='spearman', threshold=0.1):
     return df_dropped
 
 
+def analysis_factors_main(csv_path, decomposition_method='PCA',
+                          decomposition_threshold=0.9, correlation_method='spearman',
+                          correlation_threshold=0.1, output_csv_name='output_factors.csv'):
+    df = pd.read_csv(csv_path)
+    if decomposition_method == 'PCA':
+        decomposition_df = Principal_Component_Analysis(df, threshold=decomposition_threshold)
+    elif decomposition_method == 'FA':
+        decomposition_df = Factor_Analysis(df, threshold=decomposition_threshold)
+    CA_df = correlation_analysis(decomposition_df, method=correlation_method, threshold=correlation_threshold)
+    CA_df.to_csv(output_csv_name, index=False)
+
+
 if __name__ == '__main__':
-    file_path = './output_null.csv'
-    df = pd.read_csv(file_path)
-    PCA_df = Principal_Component_Analysis(df, threshold=0.95)
-    # FA_df = Factor_Analysis(df, threshold=0.95)
-    CA_df = correlation_analysis(PCA_df, method='spearman', threshold=0.1)
+    csv_path = './modified_file.csv'
+    analysis_factors_main(csv_path, decomposition_method='FA')
