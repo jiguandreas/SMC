@@ -35,7 +35,7 @@ def train_Random_Forest(data, target_column='Energy_Consumption', pretrained=Fal
         print("Training Random Forest model Using Bayes...")
         search_spaces = {
             'n_estimators': Integer(100, 200),
-            'max_features': Categorical(['auto', 'sqrt']),
+            'max_features': Categorical(['log2', 'sqrt']),
             'max_depth': Integer(10, 30),
             'min_samples_split': Integer(4, 10),
             'min_samples_leaf': Integer(2, 10)
@@ -261,11 +261,12 @@ def regression_main(csv_path, method='Random_Forest', pretrained=False):
         model = train_LGBM(df, target_column='Energy_Consumption', pretrained=pretrained)
     elif method == 'SVR':
         model = train_SVR(df, target_column='Energy_Consumption')
+    return model
 
 
 
 
 if __name__ == '__main__':
     csv_path = './output_factors.csv'
-    regression_main(csv_path, method='SVR', pretrained=True)
+    model = regression_main(csv_path, method='Decision_Tree', pretrained=False)
 
