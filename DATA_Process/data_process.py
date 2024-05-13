@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import numpy as np
 
 
 def classify_vehicle_data(file_path):
@@ -46,11 +45,11 @@ def process_folder(folder_path, output_folder):
             gas_vehicle_data_list.append(gas_vehicle_data)
 
     # 合并电车数据和油车数据并保存
-    electric_path =  os.path.join(output_folder, "electric_vehicle_data.csv")
+    electric_path = os.path.join(output_folder, "electric_vehicle_data.csv")
     gas_path = os.path.join(output_folder, "gas_vehicle_data.csv")
-    merge_and_save_data(electric_vehicle_data_list,electric_path)
+    merge_and_save_data(electric_vehicle_data_list, electric_path)
     merge_and_save_data(gas_vehicle_data_list, gas_path)
-    return  electric_path,gas_path
+    return electric_path, gas_path
 
 
 def reprocessE(electric_csv):
@@ -93,8 +92,7 @@ def reprocessG(gas_csv):
     df = df.drop(columns=['DayNum', 'Matched Longitude[deg]', 'Matchted Latitude[deg]',
                           'Match Type', 'Air Conditioning Power[kW]', 'Timestamp(ms)',
                           'Short Term Fuel Trim Bank 1[%]', 'Long Term Fuel Trim Bank 1[%]',
-                          'Long Term Fuel Trim Bank 2[%]', 'Speed Limit[km/h]','Focus Points;'])
-
+                          'Long Term Fuel Trim Bank 2[%]', 'Speed Limit[km/h]', 'Focus Points;'])
 
     is_gas_vehicle = (
             (df['Fuel Rate[L/hr]'].notnull()) &
@@ -108,14 +106,45 @@ def reprocessG(gas_csv):
     df.to_csv(gas_csv, index=False)
 
 
+# 合并csv文件的函数
+def combine_csv(input_folder, output_folder, file_name):
+    os.makedirs(output_folder, exist_ok=True)
+    df_list = []
+    for filename in os.listdir(input_folder):
+        file_path = os.path.join(input_folder, filename)
+        df = pd.read_csv(file_path)
+        df_list.append(df)
+    combined_df = pd.concat(df_list, ignore_index=True)
+    save_path = os.path.join(output_folder, file_name)
+    combined_df.to_csv(save_path, index=False)
+    return save_path
 
-if __name__ =='__main__':
-    # 指定文件夹路径和输出文件夹路径
-    folder_path = "D:\数模\统计大赛\eved_dataset\data\eVED"
-    output_folder = "D:\python\SMC\DATA\Output"
-    # 处理文件夹中的CSV文件
-    electric_path, gas_path = process_folder(folder_path, output_folder)
-    reprocessE(electric_path)
-    reprocessG(gas_path)
+
+# 在合并后的csv文件中单独进行数据处理
+def process_combined_csv(data_path, output_folder, file_name):
+    df = pd.read_csv(data_path)
+    # 删除不需要的列
+    columns = ['DayNum', 'Timestamp(ms)', 'Matchted Latitude[deg]', 'Matched Longitude[deg]',
+               'Match Type', 'Air Conditioning Power[kW]']
+    df = df.drop(columns=columns)
+    save_path = os.path.join(output_folder, file_name)
+    df.to_csv(save_path, index=False)
+    return save_path
 
 
+if __name__ == '__main__':
+    """
+        把所有的原始数据week.csv放在DATA_Process/DATA文件夹下面，输出的CSV文件统一放在Output文件夹下面
+    """
+    input_folder = "./DATA"
+    output_folder = "./Output"
+    # 1.所有的week.csv合并
+    save_path = combine_csv(input_folder, output_folder, "combined_data.csv")
+    # 2.删除所有合并之后不需要的数据（在电车和油车中都不需要）
+    save_path = process_combined_csv(save_path, output_folder, "processed_data.csv")
+    # 3.
+
+
+    # electric_path, gas_path = process_folder(input_folder, output_folder)
+    # reprocessE(electric_path)
+    # reprocessG(gas_path)
