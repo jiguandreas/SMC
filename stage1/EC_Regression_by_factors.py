@@ -16,6 +16,7 @@ import pickle
 import xgboost as xgb
 import lightgbm as lgb
 
+from stage1.Analysis_factors import analysis_factors_pred
 from stage1.plot_img import rf_learning_curve, plot_feature_importance, plot_predictions_vs_actuals, plot_residuals
 
 """
@@ -443,9 +444,14 @@ def train_model(csv_path, method='Random_Forest', pretrained=False):
 """
 
 
-def predict(pred_csv_path, model):
+def predict(need_pred_csv_path, output_csv_path='temp_csv/pred_input_factors.csv', model=None):
     print('=' * 25 + "Energy Consumption Predict Start..." + '=' * 25)
-    pass
+    analysis_factors_pred(need_pred_csv_path, output_csv_name=output_csv_path,
+                          features_path='weight_ckpt/significant_features.pkl')
+    X = pd.read_csv(output_csv_path)
+    pred_output = model.predict(X)
+    print(pred_output)
+    return pred_output
 
 
 if __name__ == '__main__':
@@ -459,8 +465,8 @@ if __name__ == '__main__':
 
     # the dataset(csv) path you want to use it as test dataset
     # you will only use testset's X data(The columns except Energy consumption) to predict result Y(Energy consumption)
-    pred_path = 'temp_csv/need_predict.csv'
-    output = predict(pred_path, model)
+    pred_path = 'temp_csv/pred_input_sample.csv'
+    output = predict(pred_path, output_csv_path='temp_csv/pred_input_factors.csv', model=model)
 
 """
 以下是我在训练的时候得到的结果：
