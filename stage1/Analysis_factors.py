@@ -99,7 +99,16 @@ def analysis_factors_main(csv_path, decomposition_method='PCA',
     CA_df.to_csv(output_csv_name, index=False)
 
 
+def analysis_factors_pred(csv_path, decomposition_method='PCA',decomposition_threshold=0.9,output_csv_name='pred_factors.csv'):
+    df = pd.read_csv(csv_path)
+    if decomposition_method == 'PCA':
+        decomposition_df = Principal_Component_Analysis(df, threshold=decomposition_threshold)
+    elif decomposition_method == 'FA':
+        decomposition_df = Factor_Analysis(df, threshold=decomposition_threshold)
+
+
+
 if __name__ == '__main__':
-    csv_path = './modified_file.csv'
-    correlation_analysis(pd.read_csv(csv_path))
-    # analysis_factors_main(csv_path, decomposition_method='PCA')
+    csv_path = 'temp_csv/modified_file.csv'
+    # correlation_analysis(pd.read_csv(csv_path))
+    analysis_factors_main(csv_path, decomposition_method='PCA')
