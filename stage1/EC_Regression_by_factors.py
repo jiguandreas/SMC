@@ -15,7 +15,6 @@ from deap import base, creator, tools, algorithms
 import pickle
 import xgboost as xgb
 import lightgbm as lgb
-
 from stage1.Analysis_factors import analysis_factors_pred
 from stage1.plot_img import rf_learning_curve, plot_feature_importance, plot_predictions_vs_actuals, plot_residuals
 
@@ -311,6 +310,10 @@ def train_SVR(data, target_column='Energy_Consumption', pretrained=True):
         print('=' * 25 + "Find weight file so return Model directly" + '=' * 25)
         with open('weight_ckpt/svr_params.pkl', 'rb') as file:
             loaded_params = pickle.load(file)
+
+        if 'estimator' in loaded_params:
+            loaded_params['base_estimator'] = loaded_params.pop('estimator')
+
         bagging_model.set_params(**loaded_params)
         bagging_model.fit(X_train_scaled, y_train_scaled)
         y_pred_scaled = bagging_model.predict(X_test_scaled)
